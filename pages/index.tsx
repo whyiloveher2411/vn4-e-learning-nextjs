@@ -27,11 +27,19 @@ export default Home
 
 export async function getStaticProps() {
 
-  const res = await fetch('https://api.spacedev.vn/api/frontend/v1.0/vn4-ecommerce/product/get-featured');
+  const res = await fetch('https://api.spacedev.vn/api/frontend/v1.0/vn4-e-learning/page/get-page-of-group', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      group: 'legal'
+    })
+  });
   const posts = await res.json();
   return {
     props: {
-      posts: posts.products,
+      posts: posts.pages,
     },
   }
 }

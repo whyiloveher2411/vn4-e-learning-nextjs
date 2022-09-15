@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import styles from 'styles/Home.module.css'
 
-const Slug = ({ posts }: { posts: Array<{ id: string, title: string, slug: string }> }) => {
+const Slug = ({ post }: { post: { id: string, title: string, slug: string, content: string } }) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -13,11 +13,8 @@ const Slug = ({ posts }: { posts: Array<{ id: string, title: string, slug: strin
       </Head>
 
       <main className={styles.main}>
-        <ul>
-          {posts.map((post, index) => (
-            <li key={index}><Link href={"/product/" + post.slug}>{post.title}</Link></li>
-          ))}
-        </ul>
+        <Link href="/">Back</Link>
+        {post.content}
       </main>
     </div>
   )
@@ -27,10 +24,19 @@ export default Slug
 
 export async function getStaticPaths() {
 
-  const res = await fetch('https://api.spacedev.vn/api/frontend/v1.0/vn4-ecommerce/product/get-featured');
+  const res = await fetch('https://api.spacedev.vn/api/frontend/v1.0/vn4-e-learning/page/get-page-of-group', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      group: 'legal'
+    })
+  });
+
   const posts = await res.json();
 
-  const paths = posts.products.map((post: { id: string, title: string, slug: string }) => ({
+  const paths = posts.pages.map((post: { id: string, title: string, slug: string }) => ({
     params: post,
   }))
 
@@ -40,14 +46,24 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps() {
+export async function getStaticProps({ params }: { params: { slug: string } }) {
 
-  const res = await fetch('https://api.spacedev.vn/api/frontend/v1.0/vn4-ecommerce/product/get-featured');
+  const res = await fetch('https://api.spacedev.vn/api/frontend/v1.0/vn4-e-learning/page/get-content', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      group: "legal",
+      slug: params.slug
+    })
+  });
+
   const posts = await res.json();
 
   return {
     props: {
-      posts: posts.products,
+      post: posts.post,
     },
   }
 }
