@@ -55,7 +55,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
     },
     body: JSON.stringify({
       group: "legal",
-      slug: params.slug
+      post: params.slug
     })
   });
 
