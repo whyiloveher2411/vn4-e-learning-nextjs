@@ -22,31 +22,31 @@ const Slug = ({ post }: { post: { id: string, title: string, slug: string, conte
 
 export default Slug
 
-export async function getStaticPaths() {
+// export async function getStaticPaths() {
 
-  const res = await fetch('https://api.spacedev.vn/api/frontend/v1.0/vn4-e-learning/page/get-page-of-group', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      group: 'legal'
-    })
-  });
+//   const res = await fetch('https://api.spacedev.vn/api/frontend/v1.0/vn4-e-learning/page/get-page-of-group', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify({
+//       group: 'legal'
+//     })
+//   });
 
-  const posts = await res.json();
+//   const posts = await res.json();
 
-  const paths = posts.pages.map((post: { id: string, title: string, slug: string }) => ({
-    params: post,
-  }))
+//   const paths = posts.pages.map((post: { id: string, title: string, slug: string }) => ({
+//     params: post,
+//   }))
 
-  return {
-    paths: paths,
-    fallback: false, // can also be true or 'blocking'
-  }
-}
+//   return {
+//     paths: paths,
+//     fallback: false, // can also be true or 'blocking'
+//   }
+// }
 
-export async function getStaticProps({ params }: { params: { slug: string } }) {
+export async function getServerSideProps({ params }: { params: { slug: string } }) {
 
   const res = await fetch('https://api.spacedev.vn/api/frontend/v1.0/vn4-e-learning/page/get-content', {
     method: 'POST',
